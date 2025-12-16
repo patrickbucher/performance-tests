@@ -1,8 +1,13 @@
 import { assertEquals } from "@std/assert";
 import {
+  fibLoop,
+  fibonacci,
+  findPrimes,
   letterFrequency,
   letterFrequencyMap,
   letterFrequencyShift,
+  memoizedFib,
+  unique,
 } from "./main.ts";
 
 const text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
@@ -63,4 +68,41 @@ Deno.bench("letter frequency map", () => {
 Deno.bench("letter frequency shift", () => {
   const actual = letterFrequencyShift(text.repeat(100));
   assertEquals(actual.length, 21);
+});
+
+Deno.test("find prime numbers", () => {
+  const limit = 20;
+  const expected = [2, 3, 5, 7, 11, 13, 17, 19];
+  const actual = findPrimes(limit);
+  assertEquals(actual, expected);
+});
+
+Deno.bench("prime numbers", () => {
+  assertEquals(
+    findPrimes(100),
+    [
+      2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+      71, 73, 79, 83, 89, 97,
+    ],
+  );
+});
+
+Deno.bench("Fibonacci", () => {
+  assertEquals(fibonacci(30), 832040);
+});
+
+Deno.bench("Memoized Fibonacci", () => {
+  const memfib = memoizedFib();
+  assertEquals(memfib(30), 832040);
+});
+
+Deno.bench("Fibonacci Loop", () => {
+  assertEquals(fibLoop(30), 832040);
+});
+
+Deno.bench("unqiue", () => {
+  assertEquals(
+    unique([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5]),
+    [6, 7, 8, 9],
+  );
 });
